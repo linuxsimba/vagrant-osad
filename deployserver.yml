@@ -25,10 +25,6 @@
     - name: flush stuff
       meta: flush_handlers
 
-    # do a apt-get update
-    #- name: run apt-get update to get the latest stuff
-    #  apt: upgrade=full cache_valid_time=10000
-
     # install the vlan package for bridging support
     # install lldp to verify connectivity to switch VM
     # install bridge-utils so that brctl works
@@ -44,9 +40,6 @@
         - git
 
 
-    #    - name: update kernel
-    #  apt: name=linux-image-generic state=latest
-
     - name: copy ssh folder from vagrant to root. OSAD needs this
       command:  cp -r /home/vagrant/.ssh /root/ creates=/root/.ssh
 
@@ -56,6 +49,16 @@
         dest: '/root/osad'
         version: "{{ openstack_release }}"
       ignore_errors: yes
+
+    - name: copy ssh timeout patch to deploy server
+      copy: src="files/ssh_patch_{{ openstack_release }}.diff" dest=/tmp/
+
+    - name: patch osad repo
+      patch: >
+        src="/tmp/ssh_patch_{{ openstack_release }}.diff"
+        strip=1
+        basedir=/root/osad/
+
     - name: run bootstrap ansible script
       shell: /root/osad/scripts/bootstrap-ansible.sh
       args:
@@ -84,7 +87,7 @@
       fetch:  src=/root/.ssh/id_rsa.pub dest=./deploy_key_id_rsa.pub flat=yes
 
     - name: copy openstack_user_config.yml from vagrant folder to deployment host
-      copy: src=openstack_user_config.yml dest=/etc/openstack_deploy/
+      copy: src=files/openstack_user_config.yml dest=/etc/openstack_deploy/
 
     - name: append caching apt repo lines for containers to use
       lineinfile: dest=/etc/openstack_deploy/user_group_vars.yml line="{{item}}"

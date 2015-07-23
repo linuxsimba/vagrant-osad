@@ -1,0 +1,113 @@
+diff --git a/playbooks/galera-install.yml b/playbooks/galera-install.yml
+index a2d481b..60edd54 100644
+--- a/playbooks/galera-install.yml
++++ b/playbooks/galera-install.yml
+@@ -37,7 +37,8 @@
+     - name: Wait for container ssh
+       wait_for:
+         port: "22"
+-        delay: 5
++        delay: 10
++        search_regex: "OpenSSH"
+         host: "{{ ansible_ssh_host }}"
+       delegate_to: "{{ physical_host }}"
+       tags:
+diff --git a/playbooks/os-ceilometer-install.yml b/playbooks/os-ceilometer-install.yml
+index 7fb4a6c..7f13c83 100644
+--- a/playbooks/os-ceilometer-install.yml
++++ b/playbooks/os-ceilometer-install.yml
+@@ -26,7 +26,8 @@
+     - name: Wait for container ssh
+       wait_for:
+         port: "22"
+-        delay: 5
++        delay: 10
++        search_regex: "OpenSSH"
+         host: "{{ ansible_ssh_host }}"
+       delegate_to: "{{ physical_host }}"
+       tags:
+diff --git a/playbooks/os-cinder-install.yml b/playbooks/os-cinder-install.yml
+index a05040b..6a389fb 100644
+--- a/playbooks/os-cinder-install.yml
++++ b/playbooks/os-cinder-install.yml
+@@ -72,7 +72,8 @@
+     - name: Wait for container ssh
+       wait_for:
+         port: "22"
+-        delay: 5
++        delay: 10
++        search_regex: "OpenSSH"
+         host: "{{ ansible_ssh_host }}"
+       delegate_to: "{{ physical_host }}"
+       tags:
+diff --git a/playbooks/os-glance-install.yml b/playbooks/os-glance-install.yml
+index 226d442..7c2d834 100644
+--- a/playbooks/os-glance-install.yml
++++ b/playbooks/os-glance-install.yml
+@@ -37,7 +37,8 @@
+     - name: Wait for container ssh
+       wait_for:
+         port: "22"
+-        delay: 5
++        delay: 10
++        search_regex: "OpenSSH"
+         host: "{{ ansible_ssh_host }}"
+       delegate_to: "{{ physical_host }}"
+       tags:
+diff --git a/playbooks/os-neutron-install.yml b/playbooks/os-neutron-install.yml
+index 503ff4a..597b5ae 100644
+--- a/playbooks/os-neutron-install.yml
++++ b/playbooks/os-neutron-install.yml
+@@ -39,7 +39,8 @@
+     - name: Wait for container ssh
+       wait_for:
+         port: "22"
+-        delay: 5
++        delay: 10
++        search_regex: "OpenSSH"
+         host: "{{ ansible_ssh_host }}"
+       delegate_to: "{{ physical_host }}"
+       tags:
+@@ -50,6 +51,7 @@
+         ref_list: "{{ groups['neutron_all'] }}"
+         src_list: "{{ rabbitmq_servers }}"
+       register: servers
++      retries: 3
+     - name: Set rabbitmq servers
+       set_fact:
+         rabbitmq_servers: "{{ servers.sorted_list }}"
+diff --git a/playbooks/repo-server.yml b/playbooks/repo-server.yml
+index 34acb6a..24e2575 100644
+--- a/playbooks/repo-server.yml
++++ b/playbooks/repo-server.yml
+@@ -37,7 +37,8 @@
+     - name: Wait for container ssh
+       wait_for:
+         port: "22"
+-        delay: 5
++        delay: 10
++        search_regex: "OpenSSH"
+         host: "{{ ansible_ssh_host }}"
+       delegate_to: "{{ physical_host }}"
+       tags:
+diff --git a/playbooks/rsyslog-install.yml b/playbooks/rsyslog-install.yml
+index 0a51d52..6293ebd 100644
+--- a/playbooks/rsyslog-install.yml
++++ b/playbooks/rsyslog-install.yml
+@@ -42,6 +42,16 @@
+       delegate_to: "{{ physical_host }}"
+       tags:
+         - flush-net-cache
++    - name: Wait for container ssh
++      wait_for:
++        port: "22"
++        delay: 10
++        search_regex: "OpenSSH"
++        host: "{{ ansible_ssh_host }}"
++      delegate_to: "{{ physical_host }}"
++      tags:
++        - rsyslog-ssh-wait
++
+   roles:
+     - { role: "rsyslog_server", tags: [ "rsyslog-server" ] }
+     - role: "system_crontab_coordination"
