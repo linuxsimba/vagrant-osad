@@ -1,6 +1,6 @@
 # Vagrant-OSAD
 
-This is an installation of the [stackforge openstack deployment](https://github.com/stackforge/os-ansible-deployment) in a Vagrant management virtual environment. 
+This is an installation of the [stackforge openstack deployment](https://github.com/stackforge/os-ansible-deployment) in a Vagrant management virtual environment.
 
 
 I'm an new to Openstack. As of July 2015. Never deployed before that. Only heard about it. For my current job, I require a flexible but easy to install, Openstack deployer where I can quickly switch between different releases and different settings, i.e. I may want a setting with Cinder or one with Swift or one with a specific ML2 plugin..and so on. I found the stackforge openstack ansible deployer to be the best to suit my needs. I like the fact that the stackforge ansible deployer uses the latest patches from each release and is actively maintained. Its a plus too that tempest testing is built into it as well. But haven't learnt how to use that yet.
@@ -29,7 +29,7 @@ This setup currently uses the libvirt vagrant provider. I would love to have it 
 3. Install [vagrant-libvirt](https://github.com/pradels/vagrant-libvirt)
 4. Get the latest stable Ubuntu release. Currently its 14.04 and convert it into a Vagrant box for libvirt.
 5. Change the Vagrantfile to use the correct vagrant box you installed
-6. Adjust the CPU and Memory Requirements for the ``stackserver`` in the Vagrantfile. It is set by default to the minimum of 4G RAM and 2 CPUs. 
+6. Adjust the CPU and Memory Requirements for the ``stackserver`` in the Vagrantfile. It is set by default to the minimum of 4G RAM and 2 CPUs.
 7. ``vagrant up --no-parallel``.  The deploy server needs to be configured first cause the SSH key generated is then copied to all the haproxy, repo and openstack server VM.
 8. When the initial provisioning is done SSH into the deploy server, verify you can ping all the other VMs and then start the openstack deployer
 ```
@@ -44,62 +44,62 @@ $ vagrant ssh deployserver
 .... Wait 3-5 Hours.....
 
 ```
-9. Prisitine openstack environment. No images installed in Glance or network provisioned like in Devstack. 
+9. Prisitine openstack environment. No images installed in Glance or network provisioned like in Devstack.
 10. To connect to horizon from the host OS, use ``https://localhost:8081``. The admin password is ``password123`
 
 # Vagrant Topology
 
 ```
-                                                                                                                  Host OS     
-                  +--------------------+        +-----------------------+      +--------------------------+                   
-+---------------+ |                    | +----+ |                       | +--+ |                          |  +------------+   
-                  |  Host Mgmt Bridge  |        | Container Mgmt Bridge |      |   Tenant Network Bridge  |                   
-                  |                    |        |                       |      |                          |        Vagrant En^
-                  +--------+-----+-+--++        +--+----+----+-----+----+      +--------------------------+                   
-                           |     | |  |            |    |    |     |                                                          
-                           |     | |  |            |    |    |     +------------------+                                       
-                           | +---------------------+    |    |                        |                                       
-                           | |   | |  |---------------------------------------------------+                                   
-                           | |   +-------------------------+ |                        |   |                                   
-                           | |     |                    |  | |                        |   |                                   
-                           | |     |        ++----------+  | |                        |   |                                   
-                           | |     |         |             | |                        |   |                                   
-                  +--------+-+--++ |         |      +------+-+------------+         +-+---+-----------+                       
-                  |             |  |         |      |   Repo Host         |         | HA Proxy Host   |                       
-                  | Deploy      |  |         |      |        +----------+ |         |                 |                       
-                  | Host        |  |         |      |        |  Repo LXC| |         |                 |                       
-                  |             |  |         |      |        +----------+ |         |                 |                       
-                  +-------------+  |         |      +---------------------+         +-----------------+                       
-                                   |         +--------|                                                                       
-                   +---------------+-------------------------------------------------------------------------------+          
-                   |                          +--------------------------+                                         |          
-                   |                          |  Container Mgmt Bridge on|                                         |          
-                   |                          |  Openstack Host          |                                         |          
-                   |                          +--------------------------+                                         |          
-                   |         +-------------------+             +-----------------+     +---------------+           |          
-                   |         | Cinder API LXC    |             |  Heat API LXC   |     |  no^a api lxc |           |          
-                   |         +-------------------+             +-----------------+     +---------------+           |          
-                   |         +-----------------------+         |  Heat Engine LXC|     +-----------------+         |          
-                   |         | Cinder Scheduler LXC  |         +-----------------+     |  no^a cert lxc  |         |          
-                   |         +-----------------------+         |  Horizon LXC    |    ++-----------------+---+     |          
-                   |         +-----------------------+         +-----------------+    |   no^a conductor lxc |     |          
-                   |         | Galera LXC            |         |   Keystone LXC  |    +----------------------+     |          
-                   |         +-----------------------+         +-----------------+    |   nova scheduler     |     |          
-                   |        +------------------------+         |   MemCached LXC |    |                      |     |          
-                   |        |  Glance LXC            |         +-----------------+    +----------------------+     |          
-                   |        +------------------------+        +-------------------+   +-----------------------+    |          
-                   |         +----------------------+         | Rsyslog LXC       |   |  Utility LXC          |    |          
-                   |         | RabbitMQ LXC         |         +-------------------+   +-----------------------+    |          
-                   |         +----------------------+                                                              |          
-                   |                                                                                               |          
-                   |                                                                                               |          
-                   +-----------------------------------------------------------------------------------------------+          
+                                                                                                                  Host OS
+                  +--------------------+        +-----------------------+      +--------------------------+
++---------------+ |                    | +----+ |                       | +--+ |                          |  +------------+
+                  |  Host Mgmt Bridge  |        | Container Mgmt Bridge |      |   Tenant Network Bridge  |
+                  |                    |        |                       |      |                          |      Vagrant Env
+                  +--------+-----+-+--++        +--+----+----+-----+----+      +--------------------------+
+                           |     | |  |            |    |    |     |
+                           |     | |  |            |    |    |     +------------------+
+                           | +---------------------+    |    |                        |
+                           | |   | |  |---------------------------------------------------+
+                           | |   +-------------------------+ |                        |   |
+                           | |     |                    |  | |                        |   |
+                           | |     |        ++----------+  | |                        |   |
+                           | |     |         |             | |                        |   |
+                  +--------+-+--++ |         |      +------+-+------------+         +-+---+-----------+
+                  |             |  |         |      |   Repo Host         |         | HA Proxy Host   |
+                  | Deploy      |  |         |      |        +----------+ |         |                 |
+                  | Host        |  |         |      |        |  Repo LXC| |         |                 |
+                  |             |  |         |      |        +----------+ |         |                 |
+                  +-------------+  |         |      +---------------------+         +-----------------+
+                                   |         +--------|
+                   +---------------+-------------------------------------------------------------------------------+
+                   |                          +--------------------------+                                         |
+                   |                          |  Container Mgmt Bridge on|                                         |
+                   |                          |  Openstack Host          |                                         |
+                   |                          +--------------------------+                                         |
+                   |         +-------------------+             +-----------------+     +---------------+           |
+                   |         | Cinder API LXC    |             |  Heat API LXC   |     |  nova api lxc |           |
+                   |         +-------------------+             +-----------------+     +---------------+           |
+                   |         +-----------------------+         |  Heat Engine LXC|     +-----------------+         |
+                   |         | Cinder Scheduler LXC  |         +-----------------+     |  nova cert lxc  |         |
+                   |         +-----------------------+         |  Horizon LXC    |    ++-----------------+---+     |
+                   |         +-----------------------+         +-----------------+    |   nova conductor lxc |     |
+                   |         | Galera LXC            |         |   Keystone LXC  |    +----------------------+     |
+                   |         +-----------------------+         +-----------------+    |   nova scheduler     |     |
+                   |        +------------------------+         |   MemCached LXC |    |                      |     |
+                   |        |  Glance LXC            |         +-----------------+    +----------------------+     |
+                   |        +------------------------+        +-------------------+   +-----------------------+    |
+                   |         +----------------------+         | Rsyslog LXC       |   |  Utility LXC          |    |
+                   |         | RabbitMQ LXC         |         +-------------------+   +-----------------------+    |
+                   |         +----------------------+                                                              |
+                   |                                                                                               |
+                   |                                                                                               |
+                   +-----------------------------------------------------------------------------------------------+
 
 ```
 
 The topology consists of 3 bridges on the Host OS and 3 VMs.
 
-### Topology Info from Libvirt 
+### Topology Info from Libvirt
 
 #### Server list
 ```

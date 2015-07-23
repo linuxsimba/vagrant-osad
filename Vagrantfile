@@ -73,12 +73,13 @@ Vagrant.configure(2) do |config|
   end
 
   # OSAD Server
-  # Requires 8G of RAM and 3 CPUS
+  # Minimum requirement is 4GB of RAM and 2 CPU for an install to finish
+  # in a reasonable about of time. About 3 hours from scratch.
   # TODO make memory or cpus a vagrant variable and disk variable
   config.vm.define :stackserver do |node|
     node.vm.provider :libvirt do |domain|
-      domain.memory = 50000
-      domain.cpus = 10
+      domain.memory = 4096
+      domain.cpus = 2
       # for cinder block services whenever i get to it.
       domain.storage :file, :size => '40G'
     end
