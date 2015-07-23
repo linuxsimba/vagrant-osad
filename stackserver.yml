@@ -1,0 +1,3 @@
+- include: bootup_infraserver.yml
+# not done yet
+#- include: install_cinder_volumes.yml

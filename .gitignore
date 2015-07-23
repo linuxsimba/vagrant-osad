@@ -1,0 +1,4 @@
+*.swp
+.vagrant/
+./deploy_key_id_rsa.pub
+os-ansible-deployment/

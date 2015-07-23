@@ -1,0 +1,90 @@
+---
+cidr_networks:
+  container: 192.168.20.0/24
+
+
+used_ips:
+  - "192.168.20.1,192.168.20.10,192.168.20.11,192.168.20.12"
+
+global_overrides:
+  internal_lb_vip_address: 192.168.50.10
+  external_lb_vip_address: 192.168.20.10
+  management_bridge: "br-mgmt"
+  provider_networks:
+    - network:
+        container_bridge: "br-mgmt"
+        container_type: "veth"
+        container_interface: "eth1"
+        ip_from_q: "container"
+        type: "raw"
+        group_binds:
+          - all_containers
+          - hosts
+        is_container_address: true
+        is_ssh_address: true
+    - network:
+        container_bridge: "br-vlan"
+        container_type: "veth"
+        container_interface: "eth12"
+        host_bind_override: "eth3"
+        type: "flat"
+        net_name: "flat"
+        group_binds:
+          - neutron_linuxbridge_agent
+    - network:
+        container_bridge: "br-vlan"
+        container_type: "veth"
+        container_interface: "eth11"
+        type: "vlan"
+        range: "1:10"
+        net_name: "vlan"
+        group_binds:
+          - neutron_linuxbridge_agent
+
+shared-infra_hosts:
+  stackserver:
+    # Rabbitmq, and galera are set to multiples to test clustering.
+    affinity:
+      galera_container: 1
+      rabbit_mq_container: 1
+    ip: 192.168.50.11
+
+os-infra_hosts:
+  stackserver:
+    # Horizon is set to multiple to test clustering. This test only requires x2.
+    affinity:
+      horizon_container: 1
+    ip: 192.168.50.11
+
+storage-infra_hosts:
+  stackserver:
+    ip: 192.168.50.11
+
+repo-infra_hosts:
+  reposerver:
+    affinity:
+      repo_container: 1
+    ip: 192.168.50.12
+
+identity_hosts:
+  stackserver:
+    # Keystone is set to multiple to test clustering. This test only requires x2.
+    affinity:
+      keystone_container: 1
+    ip: 192.168.50.11
+
+compute_hosts:
+  stackserver:
+    ip: 192.168.50.11
+
+log_hosts:
+  stackserver:
+    ip: 192.168.50.11
+
+network_hosts:
+  stackserver:
+    ip: 192.168.50.11
+
+haproxy_hosts:
+  haproxy:
+    ip: 192.168.50.10

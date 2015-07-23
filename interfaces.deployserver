@@ -1,0 +1,16 @@
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+# host mgmt network
+auto eth1
+iface eth1 inet static
+  address 192.168.50.1/24
+
+# container management bridge
+auto eth2
+iface eth2 inet static
+  address 192.168.20.1/24
+

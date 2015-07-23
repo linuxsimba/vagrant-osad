@@ -1,0 +1,13 @@
+- name: load vlan module
+  modprobe: name=8021q
+
+- name: update /etc/modules
+  lineinfile: dest=/etc/modules line='8021q' state=present
+
+- name: install prereq packages
+  apt: name={{ item }} cache_valid_time=10000
+  with_items:
+    - vlan
+    - lldpd
+    - bridge-utils
+    - ntp

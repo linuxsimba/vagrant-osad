@@ -1,0 +1,102 @@
+---
+- hosts: all
+  sudo: True
+  roles:
+    - { role: elnappoo.apt-cacher-ng, apt_cacher_ng_setup_ufw: False }
+  tasks:
+    - name: install vlan module
+      apt: name=vlan
+      environment:
+        http_proxy: "{{ apt_url }}"
+
+    - name: load vlan module
+      modprobe: name=8021q
+
+    - name: update /etc/modules
+      lineinfile: dest=/etc/modules line='8021q' state=present
+
+
+    - name: configure network interfaces
+      copy: src=interfaces.deployserver dest=/etc/network/interfaces
+      notify:
+        - shutdown all ints
+        - bring up all ints
+
+    - name: flush stuff
+      meta: flush_handlers
+
+    # do a apt-get update
+    #- name: run apt-get update to get the latest stuff
+    #  apt: upgrade=full cache_valid_time=10000
+
+    # install the vlan package for bridging support
+    # install lldp to verify connectivity to switch VM
+    # install bridge-utils so that brctl works
+    # install git for cloning OSAD repo
+    # install pip for running pip requirements
+    - name: install prereq packages
+      apt: name={{ item }} update_cache=yes cache_valid_time=10000
+      with_items:
+        - vlan
+        - lldpd
+        - bridge-utils
+        - python-pip
+        - git
+
+
+    #    - name: update kernel
+    #  apt: name=linux-image-generic state=latest
+
+    - name: copy ssh folder from vagrant to root. OSAD needs this
+      command:  cp -r /home/vagrant/.ssh /root/ creates=/root/.ssh
+
+    - name: git clone osad repo
+      git:
+        repo: 'https://github.com/stackforge/os-ansible-deployment.git'
+        dest: '/root/osad'
+        version: "{{ openstack_release }}"
+      ignore_errors: yes
+    - name: run bootstrap ansible script
+      shell: /root/osad/scripts/bootstrap-ansible.sh
+      args:
+        creates: /usr/local/bin/openstack-ansible
+        chdir: '/root/osad'
+
+    - name: copy openstack_deploy to /etc folder as recommended by Readme
+      shell: cp -r /root/osad/etc/openstack_deploy /etc/ creates=/etc/openstack_deploy
+
+    - name: set the password for various openstack components to be password123
+      replace:
+        dest: '/etc/openstack_deploy/user_secrets.yml'
+        regexp: '(.*password:\s*\n)'
+        replace: '\1 password123\n'
+        backup: 'yes'
+
+    - name: set the tokens auth keys for various openstack components
+      shell: ./scripts/pw-token-gen.py --file /etc/openstack_deploy/user_secrets.yml
+      args:
+        chdir: /root/osad
+
+    - name: generate root ssh key for OSAD deployment
+      user:  name=root generate_ssh_key=yes ssh_key_bits=2048 ssh_key_file=/root/.ssh/id_rsa
+
+    - name: copy deploy ssh key to ansible server
+      fetch:  src=/root/.ssh/id_rsa.pub dest=./deploy_key_id_rsa.pub flat=yes
+
+    - name: copy openstack_user_config.yml from vagrant folder to deployment host
+      copy: src=openstack_user_config.yml dest=/etc/openstack_deploy/
+
+    - name: append caching apt repo lines for containers to use
+      lineinfile: dest=/etc/openstack_deploy/user_group_vars.yml line="{{item}}"
+      with_items:
+        - '# Apt repo for openstack containers to use'
+        - "lxc_container_template_main_apt_repo: {{ ubuntu_repo }} "
+        - "lxc_container_template_security_apt_repo: {{ ubuntu_repo }} "
+
+  handlers:
+    - name: shutdown all ints
+      command:  "/sbin/ifdown -X lo -X eth0 -a"
+    - name: bring up all ints
+      command: "/sbin/ifup -X lo -X eth0 -a"
+
+

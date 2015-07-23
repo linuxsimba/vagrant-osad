@@ -1,0 +1,42 @@
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+# for host management
+auto eth1
+iface eth1 inet static
+  address 192.168.50.11/24
+
+# for container management
+auto eth2
+iface eth2 inet manual
+  up ip link set $IFACE up
+  down ip link set $IFACE down
+
+# for tenant networks
+auto eth3
+iface eth3 inet manual
+  up ip link set $IFACE up
+  down ip link set $IFACE down
+
+# container mgmt bridge
+auto br-mgmt
+iface br-mgmt inet static
+  bridge_stp off
+  bridge_waitport 0
+  bridge_fd 0
+  bridge_ports eth2
+  address 192.168.20.11/24
+
+# openstack vlan bridge
+# The neutron contains bind to br-vlan
+auto br-vlan
+iface br-vlan inet manual
+  bridge_stp off
+  bridge_waitport 0
+  bridge_fd 0
+  pre-up brctl addbr $IFACE
+  up ip link set $IFACE up
+  down ip link set $IFACE down

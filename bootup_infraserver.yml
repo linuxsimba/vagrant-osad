@@ -1,0 +1,53 @@
+## apt_url should be mentioned in ansible.extra_vars in vagrant file
+---
+- hosts: all
+  sudo: True
+  roles:
+    - add_vlan_trunking
+  tasks:
+    - name: rename ubuntu in apt/sources.list
+      replace: dest=/etc/apt/sources.list regexp='http://.*ubuntu.com' replace="{{apt_url}}"
+
+    - name: configure network interfaces
+      copy: src="interfaces.{{inventory_hostname}}" dest=/etc/network/interfaces
+      notify:
+        - shutdown all ints
+        - bring up all ints
+
+    - name: run networking restart right away if needed
+      meta: flush_handlers
+
+    - name: set grub-pc debconf variables
+      debconf: >
+        name=grub-pc
+        question=grub-pc/install_devices
+        vtype=string
+        value='/dev/sda'
+
+    - name: copy ssh key to root account
+      authorized_key: user=root key="{{ lookup('file', './deploy_key_id_rsa.pub') }}"
+
+    - name: perform an apt update
+      apt:  upgrade=full update_cache=yes cache_valid_time=10000
+      register: apt_upgrade
+
+
+    - name: reboot host only if upgrade occured
+      command: reboot
+      when: apt_upgrade.changed == True
+
+
+  handlers:
+    - name: shutdown all ints
+      command:  "/sbin/ifdown -X lo -X eth0 -a"
+    - name: bring up all ints
+      command: "/sbin/ifup -X lo -X eth0 -a"
+
+
+- hosts: all
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: wait for host to come back online
+      local_action: wait_for port=22 host="{{ ansible_ssh_host }}" delay=10
+      when: apt_upgrade.changed == True
