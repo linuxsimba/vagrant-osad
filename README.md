@@ -1,6 +1,6 @@
 # Vagrant-OSAD
 
-This is an installation of the [stackforge openstack deployment](https://github.com/stackforge/os-ansible-deployment) in a Vagrant management virtual environment.
+This is an installation of the [stackforge openstack deployment](https://github.com/stackforge/os-ansible-deployment) in a Vagrant managed virtual environment.
 
 
 I'm an new to Openstack. As of July 2015. Never deployed before that. Only heard about it. For my current job, I require a flexible but easy to install, Openstack deployer where I can quickly switch between different releases and different settings, i.e. I may want a setting with Cinder or one with Swift or one with a specific ML2 plugin..and so on. I found the stackforge openstack ansible deployer to be the best to suit my needs. I like the fact that the stackforge ansible deployer uses the latest patches from each release and is actively maintained. Its a plus too that tempest testing is built into it as well. But haven't learnt how to use that yet.
