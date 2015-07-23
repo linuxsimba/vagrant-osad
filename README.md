@@ -19,6 +19,8 @@ and so on.  For the very first release, I have "kilo_no_storage" as my first bra
 
 I plan to keep this vagrant setup up to date as least til end of 2016. Not sure if I'll still be working with Openstack after that. So as the stackforge ansible project upgrades, I will upgrade this project in line with it too.
 
+# Hardware Requirements
+I build on an Laptop, with 8GB RAM and 250GB just fine.
 
 # Usage
 
