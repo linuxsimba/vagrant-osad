@@ -45,7 +45,7 @@ $ vagrant ssh deployserver
 
 ```
 9. Prisitine openstack environment. No images installed in Glance or network provisioned like in Devstack.
-10. To connect to horizon from the host OS, use ``https://localhost:8081``. The admin password is ``password123`
+10. To connect to horizon from the host OS, use ``https://localhost:8081``. The admin password is ``password123``
 
 # Vagrant Topology
 
