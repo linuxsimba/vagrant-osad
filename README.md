@@ -172,3 +172,16 @@ This is configured with all the openstack git python packages specific to the re
 I put all openstack services into one server. The stackforge ansible deployer puts most services into LXC containers. Only service actually running on the openstack server is Nova and Neutron Linux bridge agent. (at least that what I can tell so far)
 
 Seems to work so far. I havent' done an install with Cinder but I make requirements for this in the VM by adding an extra 40G drive. It shows up as ``/dev/vda``
+
+## Contributing
+
+1. Fork it.
+2. Create your feature branch (`git checkout -b my-new-feature`).
+3. Commit your changes (`git commit -am 'Add some feature'`).
+4. Push to the branch (`git push origin my-new-feature`).
+5. Create new Pull Request.
+
+## License and Authors
+Author:: Stanley Karunditu
+
+License:: GPLv2
