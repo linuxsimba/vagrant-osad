@@ -65,10 +65,6 @@ Vagrant.configure(2) do |config|
         openstack_release: 'kilo'
       }
     end
-    node.vm.provider :libvirt do |domain|
-      domain.memory = 1024
-      domain.cpus = 2
-    end
     node.vm.network "forwarded_port", guest: 443, host: 8081
   end
 
