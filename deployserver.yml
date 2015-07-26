@@ -90,7 +90,7 @@
       copy: src=files/openstack_user_config.yml dest=/etc/openstack_deploy/
 
     - name: append caching apt repo lines for containers to use
-      lineinfile: dest=/etc/openstack_deploy/user_group_vars.yml line="{{item}}"
+      lineinfile: dest=/root/osad/playbooks/inventory/group_vars/hosts.yml line="{{item}}"
       with_items:
         - '# Apt repo for openstack containers to use'
         - "lxc_container_template_main_apt_repo: {{ ubuntu_repo }} "
