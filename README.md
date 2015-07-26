@@ -32,7 +32,17 @@ This setup currently uses the libvirt vagrant provider. I would love to have it 
 4. Get the latest stable Ubuntu release. Currently its 14.04 and convert it into a Vagrant box for libvirt.
 5. Change the Vagrantfile to use the correct vagrant box you installed
 6. Adjust the CPU and Memory Requirements for the ``stackserver`` in the Vagrantfile. It is set by default to the minimum of 4G RAM and 2 CPUs.
-7. ``vagrant up --no-parallel``.  The deploy server needs to be configured first cause the SSH key generated is then copied to all the haproxy, repo and openstack server VM.
+7. The deploy server needs to be configured first cause the SSH key generated is then copied to all the haproxy, repo and openstack server VM.
+
+```
+$ vagrant up deployserver
+```
+
+Bring up the rest of the VMs in parallel
+```
+$ vagrant up
+```
+
 8. When the initial provisioning is done SSH into the deploy server, verify you can ping all the other VMs and then start the openstack deployer
 ```
 $ vagrant ssh deployserver
