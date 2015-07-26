@@ -24,8 +24,18 @@ Vagrant.configure(2) do |config|
   config.vm.define :deployserver do |node|
     node.vm.hostname = 'deployosad'
     node.vm.synced_folder '.', '/vagrant', :disabled => true
-    node.vm.network :private_network, :auto_config => false, :libvirt__forward_mode => 'veryisolated', :libvirt__dhcp_enabled => false, :libvirt__network_name => 'host_mgmt'
-    node.vm.network :private_network, :auto_config => false, :libvirt__forward_mode => 'veryisolated', :libvirt__dhcp_enabled => false, :libvirt__network_name => 'container_mgmt'
+    node.vm.network :private_network,
+      :ip => '169.2.2.2/24', # bogus IP so tha vagrant-libvirt can create virt_network
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'host_mgmt'
+    node.vm.network :private_network,
+      :ip => '169.2.2.3/24',
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'container_mgmt'
     node.vm.provision :ansible do |ansible|
       ansible.playbook = 'deployserver.yml'
       ansible.extra_vars = {
@@ -40,8 +50,18 @@ Vagrant.configure(2) do |config|
   config.vm.define :reposerver do |node|
     node.vm.hostname = 'reposerver'
     node.vm.synced_folder '.', '/vagrant', :disabled => true
-    node.vm.network :private_network, :auto_config => false, :libvirt__forward_mode => 'veryisolated', :libvirt__dhcp_enabled => false, :libvirt__network_name => 'host_mgmt'
-    node.vm.network :private_network, :auto_config => false, :libvirt__forward_mode => 'veryisolated', :libvirt__dhcp_enabled => false, :libvirt__network_name => 'container_mgmt'
+    node.vm.network :private_network,
+      :ip => '169.2.2.4/24', # bogus IP so that vagrant-libvirt can create virt_network
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'host_mgmt'
+    node.vm.network :private_network,
+      :ip => '169.2.2.5/24', # bogus IP so that vagrant-libvirt can create virt_network
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'container_mgmt'
     node.vm.provision :ansible do |ansible|
       ansible.playbook = 'reposerver.yml'
       ansible.extra_vars = {
@@ -56,8 +76,18 @@ Vagrant.configure(2) do |config|
   config.vm.define :haproxy do |node|
     node.vm.hostname = 'haproxy'
     node.vm.synced_folder '.', '/vagrant', :disabled => true
-    node.vm.network :private_network, :auto_config => false, :libvirt__forward_mode => 'veryisolated', :libvirt__dhcp_enabled => false, :libvirt__network_name => 'host_mgmt'
-    node.vm.network :private_network, :auto_config => false, :libvirt__forward_mode => 'veryisolated', :libvirt__dhcp_enabled => false, :libvirt__network_name => 'container_mgmt'
+    node.vm.network :private_network,
+      :ip => '169.2.2.6/24', # bogus IP so that vagrant-libvirt can create virt_network
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'host_mgmt'
+    node.vm.network :private_network,
+      :ip => '169.2.2.7/24', # bogus ip so that vagrant-libvirt can create virt_network
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'container_mgmt'
     node.vm.provision :ansible do |ansible|
       ansible.playbook = 'haproxy.yml'
       ansible.extra_vars = {
@@ -81,9 +111,24 @@ Vagrant.configure(2) do |config|
     end
     node.vm.hostname = 'stackserver'
     node.vm.synced_folder '.', '/vagrant', :disabled => true
-    node.vm.network :private_network, :auto_config => false, :libvirt__forward_mode => 'veryisolated', :libvirt__dhcp_enabled => false, :libvirt__network_name => 'host_mgmt'
-    node.vm.network :private_network, :auto_config => false, :libvirt__forward_mode => 'veryisolated', :libvirt__dhcp_enabled => false, :libvirt__network_name => 'container_mgmt'
-    node.vm.network :private_network, :auto_config => false, :libvirt__forward_mode => 'veryisolated', :libvirt__dhcp_enabled => false, :libvirt__network_name => 'for_tenants'
+    node.vm.network :private_network,
+      :ip => '169.2.2.8/24',  # bogus IP so that vagrant-libvirt can create virt_network
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'host_mgmt'
+    node.vm.network :private_network,
+      :ip => '169.2.2.9/24',
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'container_mgmt'
+    node.vm.network :private_network,
+      :ip => '169.2.2.10/24',
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'for_tenants'
     node.vm.provision :ansible do |ansible|
       ansible.playbook = 'stackserver.yml'
       ansible.extra_vars = {
