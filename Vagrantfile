@@ -31,7 +31,7 @@ Vagrant.configure(2) do |config|
       :libvirt__dhcp_enabled => false,
       :libvirt__network_name => 'host_mgmt'
     node.vm.network :private_network,
-      :ip => '169.2.2.3/24',
+      :ip => '169.2.3.3/24',
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
@@ -51,13 +51,11 @@ Vagrant.configure(2) do |config|
     node.vm.hostname = 'reposerver'
     node.vm.synced_folder '.', '/vagrant', :disabled => true
     node.vm.network :private_network,
-      :ip => '169.2.2.4/24', # bogus IP so that vagrant-libvirt can create virt_network
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
       :libvirt__network_name => 'host_mgmt'
     node.vm.network :private_network,
-      :ip => '169.2.2.5/24', # bogus IP so that vagrant-libvirt can create virt_network
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
@@ -77,13 +75,11 @@ Vagrant.configure(2) do |config|
     node.vm.hostname = 'haproxy'
     node.vm.synced_folder '.', '/vagrant', :disabled => true
     node.vm.network :private_network,
-      :ip => '169.2.2.6/24', # bogus IP so that vagrant-libvirt can create virt_network
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
       :libvirt__network_name => 'host_mgmt'
     node.vm.network :private_network,
-      :ip => '169.2.2.7/24', # bogus ip so that vagrant-libvirt can create virt_network
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
@@ -112,19 +108,17 @@ Vagrant.configure(2) do |config|
     node.vm.hostname = 'stackserver'
     node.vm.synced_folder '.', '/vagrant', :disabled => true
     node.vm.network :private_network,
-      :ip => '169.2.2.8/24',  # bogus IP so that vagrant-libvirt can create virt_network
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
       :libvirt__network_name => 'host_mgmt'
     node.vm.network :private_network,
-      :ip => '169.2.2.9/24',
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
       :libvirt__network_name => 'container_mgmt'
     node.vm.network :private_network,
-      :ip => '169.2.2.10/24',
+      :ip => '169.2.4.10/24',
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
