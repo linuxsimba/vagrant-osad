@@ -56,10 +56,6 @@ os-infra_hosts:
       horizon_container: 1
     ip: 192.168.50.11
 
-storage-infra_hosts:
-  stackserver:
-    ip: 192.168.50.11
-
 repo-infra_hosts:
   reposerver:
     affinity:
