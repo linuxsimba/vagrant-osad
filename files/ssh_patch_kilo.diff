@@ -1,8 +1,8 @@
 diff --git a/playbooks/galera-install.yml b/playbooks/galera-install.yml
-index a2d481b..60edd54 100644
+index 7f0d2ac..d537d1c 100644
 --- a/playbooks/galera-install.yml
 +++ b/playbooks/galera-install.yml
-@@ -37,7 +37,8 @@
+@@ -86,7 +86,8 @@
      - name: Wait for container ssh
        wait_for:
          port: "22"
@@ -90,6 +90,18 @@ index 34acb6a..24e2575 100644
          host: "{{ ansible_ssh_host }}"
        delegate_to: "{{ physical_host }}"
        tags:
+diff --git a/playbooks/roles/pip_install/tasks/main.yml b/playbooks/roles/pip_install/tasks/main.yml
+index 361fe4a..db18e98 100644
+--- a/playbooks/roles/pip_install/tasks/main.yml
++++ b/playbooks/roles/pip_install/tasks/main.yml
+@@ -19,6 +19,7 @@
+     state: "directory"
+     group: "{{ ansible_user_id }}"
+     owner: "{{ ansible_user_id }}"
++  retries: 3
+   with_items:
+     - "/opt"
+     - "{{ ansible_env.HOME }}/.cache"
 diff --git a/playbooks/rsyslog-install.yml b/playbooks/rsyslog-install.yml
 index 0a51d52..6293ebd 100644
 --- a/playbooks/rsyslog-install.yml
