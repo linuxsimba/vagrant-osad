@@ -50,14 +50,14 @@
         version: "{{ openstack_release }}"
       ignore_errors: yes
 
-    - name: copy ssh timeout patch to deploy server
-      copy: src="files/ssh_patch_{{ openstack_release }}.diff" dest=/tmp/
+  #    - name: copy ssh timeout patch to deploy server
+  #    copy: src="files/ssh_patch_{{ openstack_release }}.diff" dest=/tmp/
 
-    - name: patch osad repo
-      patch: >
-        src="/tmp/ssh_patch_{{ openstack_release }}.diff"
-        strip=1
-        basedir=/root/osad/
+  #  - name: patch osad repo
+  #    patch: >
+  #      src="/tmp/ssh_patch_{{ openstack_release }}.diff"
+  #      strip=1
+  #      basedir=/root/osad/
 
     - name: run bootstrap ansible script
       shell: /root/osad/scripts/bootstrap-ansible.sh
