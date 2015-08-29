@@ -38,9 +38,10 @@ This setup currently uses the libvirt vagrant provider. I would love to have it 
 $ vagrant up deployserver
 ```
 
-Bring up the rest of the VMs in parallel
+Bring up the rest of the VMs in a non parallel fashion, at least for the libvirt
+provider
 ```
-$ vagrant up
+$ vagrant up --no-parallel
 ```
 
 8. When the initial provisioning is done SSH into the deploy server, verify you can ping all the other VMs and then start the openstack deployer
