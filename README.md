@@ -195,6 +195,6 @@ Seems to work so far. I havent' done an install with Cinder but I make requireme
 5. Create new Pull Request.
 
 ## License and Authors
-Author:: Stanley Karunditu
+Author:: Stanley Kamithi`
 
-License:: GPLv2
+License:: Apache 2.0
