@@ -48,5 +48,4 @@ iface br-vxlan inet static
     bridge_fd 0
     address 192.168.40.2
     netmask 255.255.255.0
-    bridge_ports eth4
-
+    bridge_ports eth3

@@ -1,10 +1,10 @@
 ---
 cidr_networks:
   container: 192.168.20.0/24
-
+  tunnel: 192.168.40.0/24
 
 used_ips:
-  - "192.168.20.1,192.168.20.10,192.168.20.11,192.168.20.12"
+  - "192.168.20.1,192.168.20.14"
 
 global_overrides:
   internal_lb_vip_address: 192.168.50.10
@@ -23,6 +23,15 @@ global_overrides:
         is_container_address: true
         is_ssh_address: true
     - network:
+        container_bridge: "br-vxlan"
+        container_type: "veth"
+        container_interface: "eth10"
+        ip_from_q: "tunnel"
+        type: "vxlan"
+        range: "2000:3000"
+        group_binds:
+          - neutron_linuxbridge_agent
+    - network:
         container_bridge: "br-vlan"
         container_type: "veth"
         container_interface: "eth12"
@@ -36,7 +45,7 @@ global_overrides:
         container_type: "veth"
         container_interface: "eth11"
         type: "vlan"
-        range: "1:10"
+        range: "100:200"
         net_name: "vlan"
         group_binds:
           - neutron_linuxbridge_agent
