@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "trusty64"
+  config.vm.box = "trusty64_4"
   # vagrant issues #1673..fixes hang with configure_networks
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
   config.vm.provider :libvirt do |domain|
@@ -132,7 +132,7 @@ Vagrant.configure(2) do |config|
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
-      :libvirt__network_name => 'for_tenants'
+      :libvirt__network_name => 'gatewayrtr'
     node.vm.provision :ansible do |ansible|
       ansible.playbook = 'stackserver.yml'
       ansible.extra_vars = {
@@ -177,7 +177,7 @@ Vagrant.configure(2) do |config|
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
-      :libvirt__network_name => 'for_tenants'
+      :libvirt__network_name => 'gatewayrtr'
     node.vm.provision :ansible do |ansible|
       ansible.playbook = 'stackserver.yml'
       ansible.extra_vars = {
@@ -188,8 +188,8 @@ Vagrant.configure(2) do |config|
   end
 
 
-  ## Tenant router
-  config.vm.define :tenantrouter do |node|
+  ## Gateway router
+  config.vm.define :gatewayrouter do |node|
     node.vm.provider :libvirt do |domain|
       domain.memory = 128
     end
@@ -205,7 +205,7 @@ Vagrant.configure(2) do |config|
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
-      :libvirt__network_name => 'for_tenants'
+      :libvirt__network_name => 'gatewayrtr'
     node.vm.provision :ansible do |ansible|
       ansible.playbook = 'tenantrouter.yml'
       ansible.extra_vars = {

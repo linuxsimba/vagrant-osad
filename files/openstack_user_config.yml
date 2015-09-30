@@ -81,6 +81,8 @@ identity_hosts:
 compute_hosts:
   stackserver:
     ip: 192.168.50.11
+  stackserver2:
+    ip: 192.168.50.14
 
 log_hosts:
   stackserver:
