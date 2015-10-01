@@ -1,0 +1,13 @@
+- include: bootup_infraserver.yml
+- name: additional tenantrouter actions
+  hosts: all
+  sudo: True
+  tasks:
+    - name: enable routing
+      sysctl: name="net.ipv4.ip_forward" value=1 sysctl_set=yes
+
+    # todo use iptables-save/restore instead and store config in iptables.rules
+    - name: add iptables NAT statement to rc.local
+      lineinfile: dest=/etc/rc.local regexp="iptables"
+              insertbefore="exit 0"
+              line="/sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE"

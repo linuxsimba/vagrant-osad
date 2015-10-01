@@ -194,7 +194,7 @@ Vagrant.configure(2) do |config|
       domain.memory = 128
     end
     node.vm.synced_folder '.', '/vagrant', :disabled => true
-    node.vm.hostname = 'tenantrouter'
+    node.vm.hostname = 'gatewayrouter'
     node.vm.network :private_network,
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
@@ -207,7 +207,7 @@ Vagrant.configure(2) do |config|
       :libvirt__dhcp_enabled => false,
       :libvirt__network_name => 'gatewayrtr'
     node.vm.provision :ansible do |ansible|
-      ansible.playbook = 'tenantrouter.yml'
+      ansible.playbook = 'gatewaytrouter.yml'
       ansible.extra_vars = {
         apt_url: 'http://192.168.50.1:3142',
         openstack_release: 'kilo'

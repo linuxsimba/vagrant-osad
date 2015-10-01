@@ -1,9 +1,0 @@
-- include: bootup_infraserver.yml
-- name: additional tenantrouter actions
-  hosts: all
-  sudo: True
-  tasks:
-    - name: enable routing
-      sysctl: name="net.ipv4.ip_forward" value=1 sysctl_set=yes
-
-

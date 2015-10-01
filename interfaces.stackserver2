@@ -37,9 +37,7 @@ iface br-vlan inet manual
   bridge_stp off
   bridge_waitport 0
   bridge_fd 0
-  pre-up brctl addbr $IFACE
-  up ip link set $IFACE up
-  down ip link set $IFACE down
+  bridge_ports eth3
 
 auto br-vxlan
 iface br-vxlan inet static
@@ -48,4 +46,4 @@ iface br-vxlan inet static
     bridge_fd 0
     address 192.168.40.3
     netmask 255.255.255.0
-    bridge_ports eth3
+    bridge_ports eth4
