@@ -32,10 +32,9 @@ global_overrides:
         group_binds:
           - neutron_linuxbridge_agent
     - network:
-        container_bridge: "br-vlan"
+        container_bridge: "br-external"
         container_type: "veth"
         container_interface: "eth12"
-        host_bind_override: "eth3"
         type: "flat"
         net_name: "flat"
         group_binds:
@@ -81,8 +80,9 @@ identity_hosts:
 compute_hosts:
   stackserver:
     ip: 192.168.50.11
-  stackserver2:
-    ip: 192.168.50.14
+# optional 2nd compute server
+#  stackserver2:
+#   ip: 192.168.50.14
 
 log_hosts:
   stackserver:

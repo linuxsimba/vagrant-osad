@@ -39,6 +39,16 @@ iface br-vlan inet manual
   bridge_fd 0
   bridge_ports eth3
 
+# external network bridge. binds eth4 to the bridge
+# The neutron contains bind to br-vlan
+auto br-external
+iface br-external inet manual
+  bridge_stp off
+  bridge_waitport 0
+  bridge_fd 0
+  bridge_ports eth4
+
+
 auto br-vxlan
 iface br-vxlan inet static
     bridge_stp off
