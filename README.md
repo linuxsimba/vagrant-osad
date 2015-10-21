@@ -138,6 +138,13 @@ This is configured with all the openstack git python packages specific to the re
 
 I put all openstack services into one server. The stackforge ansible deployer puts most services into LXC containers. Only service actually running on the openstack server is Nova and Neutron Linux bridge agent. The other services are all running in LXC containers on the server. (at least that what I can tell so far)
 
+#### Gateway router (server)
+This is an Ubuntu VM with NAT enabled. Create a Flat external network and bind
+it to the `br-external` interface. VM traffic going outbound will be sent NATted
+out of the vagrant environment, via the gateway router -> deploy server -> and
+out to the internet. Goal for this was to mimic an actual gateway router that
+one would deploy in a real scenario.
+
 Seems to work so far. I havent' done an install with Cinder but I make requirements for this in the VM by adding an extra 40G drive. It shows up as ``/dev/vda``
 
 ## Contributing
