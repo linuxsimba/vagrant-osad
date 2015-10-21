@@ -39,6 +39,7 @@
         - python-pip
         - git
         - vim
+        - tmux
 
 
     - name: copy ssh folder from vagrant to root. OSAD needs this
@@ -89,7 +90,7 @@
         - "lxc_container_template_security_apt_repo: {{ ubuntu_repo }} "
 
     - name: increase ssh delay to help prevent ssh timeouts
-      lineinfile:  dest=/etc/openstack_deploy/user_variables.yml line="ssh_delay: 20"
+      lineinfile: 'dest="/etc/openstack_deploy/user_variables.yml" line="ssh_delay: 20"'
 
     - name: update vagrant bashrc to login as root when vagrant ssh deployserver is entered
       lineinfile: dest=/home/vagrant/.bashrc line="sudo su -- root"  owner=vagrant

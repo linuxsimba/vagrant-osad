@@ -86,7 +86,7 @@ virsh # net-list
 ----------------------------------------------------------
  container_mgmt       active     no            yes
  default              active     yes           yes
- for_tenants          active     no            yes
+ gatewayrtr           active     no            yes
  host_mgmt            active     no            yes
  vagrant-libvirt      active     no            yes
 ```

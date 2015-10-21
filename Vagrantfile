@@ -107,22 +107,32 @@ Vagrant.configure(2) do |config|
     end
     node.vm.hostname = 'stackserver'
     node.vm.synced_folder '.', '/vagrant', :disabled => true
+    # eth1
     node.vm.network :private_network,
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
       :libvirt__network_name => 'host_mgmt'
+    # eth2
     node.vm.network :private_network,
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
       :libvirt__network_name => 'container_mgmt'
+    # eth3
     node.vm.network :private_network,
-      :ip => '169.2.4.10/24',
+      :ip => '169.3.4.20/24', # bogus Ip so it can create libvirt network
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
-      :libvirt__network_name => 'for_tenants'
+      :libvirt__network_name => 'vxlan_tunnel'
+    # eth4
+    node.vm.network :private_network,
+      :ip => '169.2.4.10/24', # bogus IP so it can create libvirt network
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'gatewayrtr'
     node.vm.provision :ansible do |ansible|
       ansible.playbook = 'stackserver.yml'
       ansible.extra_vars = {
@@ -132,13 +142,59 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  ## Tenant router
-  config.vm.define :tenantrouter do |node|
+  # OSAD Server
+  # in a reasonable about of time. About 3 hours from scratch.
+  # TODO make memory or cpus a vagrant variable and disk variable
+  config.vm.define :stackserver2 do |node|
+    node.vm.provider :libvirt do |domain|
+      domain.memory = 2048
+      domain.cpus = 2
+      # for cinder block services whenever i get to it.
+      domain.storage :file, :size => '40G'
+    end
+    node.vm.hostname = 'stackserver2'
+    node.vm.synced_folder '.', '/vagrant', :disabled => true
+    #eth1
+    node.vm.network :private_network,
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'host_mgmt'
+    #eth2
+    node.vm.network :private_network,
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'container_mgmt'
+    #eth3
+    node.vm.network :private_network,
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'vxlan_tunnel'
+    #eth4
+    node.vm.network :private_network,
+      :auto_config => false,
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'gatewayrtr'
+    node.vm.provision :ansible do |ansible|
+      ansible.playbook = 'stackserver.yml'
+      ansible.extra_vars = {
+        apt_url: 'http://192.168.50.1:3142',
+        openstack_release: 'kilo'
+      }
+    end
+  end
+
+
+  ## Gateway router
+  config.vm.define :gatewayrouter do |node|
     node.vm.provider :libvirt do |domain|
       domain.memory = 128
     end
     node.vm.synced_folder '.', '/vagrant', :disabled => true
-    node.vm.hostname = 'tenantrouter'
+    node.vm.hostname = 'gatewayrouter'
     node.vm.network :private_network,
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
@@ -149,9 +205,9 @@ Vagrant.configure(2) do |config|
       :auto_config => false,
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
-      :libvirt__network_name => 'for_tenants'
+      :libvirt__network_name => 'gatewayrtr'
     node.vm.provision :ansible do |ansible|
-      ansible.playbook = 'tenantrouter.yml'
+      ansible.playbook = 'gatewaytrouter.yml'
       ansible.extra_vars = {
         apt_url: 'http://192.168.50.1:3142',
         openstack_release: 'kilo'
