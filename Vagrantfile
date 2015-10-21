@@ -205,7 +205,7 @@ Vagrant.configure(2) do |config|
       :libvirt__dhcp_enabled => false,
       :libvirt__network_name => 'gatewayrtr'
     node.vm.provision :ansible do |ansible|
-      ansible.playbook = 'gatewaytrouter.yml'
+      ansible.playbook = 'gatewayrouter.yml'
       ansible.extra_vars = {
         apt_url: 'http://192.168.50.1:3142',
         openstack_release: 'kilo'
