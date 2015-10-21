@@ -11,9 +11,9 @@ There are others out there, but none provides me the the flexibility I need. Som
 
 In this repo, I will keep my specific designs in different branches. So for example there will be:
 
-* kilo_no_storage
-* kilo_with_cinder
-* juno_no_storage
+* kilo_no_storage (done)
+* kilo_with_cinder (not done)
+* juno_no_storage (not done)
 
 and so on.  For the very first release, I have "kilo_no_storage" as my first branch.
 
@@ -57,58 +57,12 @@ $ vagrant ssh deployserver
 .... Wait 3-5 Hours.....
 
 ```
-9. Prisitine openstack environment. No images installed in Glance or network provisioned like in Devstack.
-10. To connect to horizon from the host OS, use ``https://localhost:8081``. The admin password is ``password123``
+9. Pristine openstack environment. No images installed in Glance or network provisioned like in Devstack.
+10. To connect to horizon from the host OS, use ``https://localhost:8081``. The admin password is ``password123`` (viewing Spice consoles of VMs is broken)
 
 # Vagrant Topology
 
-```
-                                                                                                                  Host OS
-                  +--------------------+        +-----------------------+      +--------------------------+
-+---------------+ |                    | +----+ |                       | +--+ |                          |  +------------+
-                  |  Host Mgmt Bridge  |        | Container Mgmt Bridge |      |   Tenant Network Bridge  |
-                  |                    |        |                       |      |                          |      Vagrant Env
-                  +--------+-----+-+--++        +--+----+----+-----+----+      +--------------------------+
-                           |     | |  |            |    |    |     |
-                           |     | |  |            |    |    |     +------------------+
-                           | +---------------------+    |    |                        |
-                           | |   | |  |---------------------------------------------------+
-                           | |   +-------------------------+ |                        |   |
-                           | |     |                    |  | |                        |   |
-                           | |     |        ++----------+  | |                        |   |
-                           | |     |         |             | |                        |   |
-                  +--------+-+--++ |         |      +------+-+------------+         +-+---+-----------+
-                  |             |  |         |      |   Repo Host         |         | HA Proxy Host   |
-                  | Deploy      |  |         |      |        +----------+ |         |                 |
-                  | Host        |  |         |      |        |  Repo LXC| |         |                 |
-                  |             |  |         |      |        +----------+ |         |                 |
-                  +-------------+  |         |      +---------------------+         +-----------------+
-                                   |         +--------|
-                   +---------------+-------------------------------------------------------------------------------+
-                   |                          +--------------------------+                    Linux Bridge ML2     |
-                   |                          |  Container Mgmt Bridge on|                    ----------------     |
-                   |                          |  Openstack Host          |                    Nova Compute         |
-                   |                          +--------------------------+                    ---------------      |
-                   |         +-------------------+             +-----------------+     +---------------+           |
-                   |         | Cinder API LXC    |             |  Heat API LXC   |     |  nova api lxc |           |
-                   |         +-------------------+             +-----------------+     +---------------+           |
-                   |         +-----------------------+         |  Heat Engine LXC|     +-----------------+         |
-                   |         | Cinder Scheduler LXC  |         +-----------------+     |  nova cert lxc  |         |
-                   |         +-----------------------+         |  Horizon LXC    |    ++-----------------+---+     |
-                   |         +-----------------------+         +-----------------+    |   nova conductor lxc |     |
-                   |         | Galera LXC            |         |   Keystone LXC  |    +----------------------+     |
-                   |         +-----------------------+         +-----------------+    |   nova scheduler     |     |
-                   |        +------------------------+         |   MemCached LXC |    |                      |     |
-                   |        |  Glance LXC            |         +-----------------+    +----------------------+     |
-                   |        +------------------------+        +-------------------+   +-----------------------+    |
-                   |         +----------------------+         | Rsyslog LXC       |   |  Utility LXC          |    |
-                   |         | RabbitMQ LXC         |         +-------------------+   +-----------------------+    |
-                   |         +----------------------+                                                              |
-                   |                                                                                               |
-                   |                                                                                               |
-                   +-----------------------------------------------------------------------------------------------+
-
-```
+![Vagrant topology](http://linuxsimba.com/vagrant-osad.svg)
 
 The topology consists of 3 bridges on the Host OS and 3 VMs.
 
