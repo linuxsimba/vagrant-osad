@@ -140,10 +140,8 @@ I put all openstack services into one server. The stackforge ansible deployer pu
 
 #### Gateway router (server)
 This is an Ubuntu VM with NAT enabled. Create a Flat external network and bind
-it to the `br-external` interface. VM traffic going outbound will be sent NATted
-out of the vagrant environment, via the gateway router -> deploy server -> and
-out to the internet. Goal for this was to mimic an actual gateway router that
-one would deploy in a real scenario.
+it to the `br-external` interface. VM traffic going outbound will be sent
+out of the vagrant environment, via the gateway router -> out to the internet. Goal for this was to mimic an actual gateway router that one would deploy in a real scenario.
 
 Seems to work so far. I havent' done an install with Cinder but I make requirements for this in the VM by adding an extra 40G drive. It shows up as ``/dev/vda``
 
