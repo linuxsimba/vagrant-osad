@@ -10,6 +10,7 @@ global_overrides:
   internal_lb_vip_address: 192.168.50.10
   external_lb_vip_address: 192.168.20.10
   management_bridge: "br-mgmt"
+  tunnel_bridge: "br-vxlan"
   provider_networks:
     - network:
         container_bridge: "br-mgmt"

@@ -92,6 +92,12 @@
     - name: increase ssh delay to help prevent ssh timeouts
       lineinfile: 'dest="/etc/openstack_deploy/user_variables.yml" line="ssh_delay: 20"'
 
+    - name: disable keepalived in haproxy - not needed in vagrant setup
+      lineinfile:
+        dest: "/etc/openstack_deploy/user_variables.yml"
+        regexp: "haproxy_use_keepalived"
+        line: "haproxy_use_keepalived: False"
+
     - name: update vagrant bashrc to login as root when vagrant ssh deployserver is entered
       lineinfile: dest=/home/vagrant/.bashrc line="sudo su -- root"  owner=vagrant
 
