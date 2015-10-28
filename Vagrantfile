@@ -12,14 +12,14 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "trusty64_4"
+  config.vm.box = "trusty64"
   # vagrant issues #1673..fixes hang with configure_networks
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
   config.vm.provider :libvirt do |domain|
     domain.memory = 256
     domain.nested = true
   end
-
+  openstack_ver = 'liberty'
   # deployment server
   config.vm.define :deployserver do |node|
     node.vm.hostname = 'deployosad'
@@ -39,7 +39,7 @@ Vagrant.configure(2) do |config|
     node.vm.provision :ansible do |ansible|
       ansible.playbook = 'deployserver.yml'
       ansible.extra_vars = {
-        openstack_release: 'kilo',
+        openstack_release: openstack_ver,
         ubuntu_repo: 'http://192.168.50.1:3142/ubuntu'
       }
     end
@@ -64,7 +64,7 @@ Vagrant.configure(2) do |config|
       ansible.playbook = 'reposerver.yml'
       ansible.extra_vars = {
         apt_url: 'http://192.168.50.1:3142',
-        openstack_release: 'kilo'
+        openstack_release: openstack_ver
       }
     end
   end
@@ -88,7 +88,7 @@ Vagrant.configure(2) do |config|
       ansible.playbook = 'haproxy.yml'
       ansible.extra_vars = {
         apt_url: 'http://192.168.50.1:3142',
-        openstack_release: 'kilo'
+        openstack_release: openstack_ver
       }
     end
     node.vm.network "forwarded_port", guest: 443, host: 8081
@@ -137,7 +137,7 @@ Vagrant.configure(2) do |config|
       ansible.playbook = 'stackserver.yml'
       ansible.extra_vars = {
         apt_url: 'http://192.168.50.1:3142',
-        openstack_release: 'kilo'
+        openstack_release: openstack_ver
       }
     end
   end
@@ -180,7 +180,7 @@ Vagrant.configure(2) do |config|
   #    ansible.playbook = 'stackserver.yml'
   #    ansible.extra_vars = {
   #      apt_url: 'http://192.168.50.1:3142',
-  #      openstack_release: 'kilo'
+  #      openstack_release: openstack_ver
   #    }
   #  end
   #end
@@ -208,7 +208,7 @@ Vagrant.configure(2) do |config|
       ansible.playbook = 'gatewayrouter.yml'
       ansible.extra_vars = {
         apt_url: 'http://192.168.50.1:3142',
-        openstack_release: 'kilo'
+        openstack_release: openstack_ver
       }
     end
   end
