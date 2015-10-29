@@ -71,8 +71,8 @@ Vagrant.configure(2) do |config|
 
 
   # LoadBalancing VM
-  config.vm.define :haproxy do |node|
-    node.vm.hostname = 'haproxy'
+  config.vm.define :loadbalancer do |node|
+    node.vm.hostname = 'loadbalancer'
     node.vm.synced_folder '.', '/vagrant', :disabled => true
     node.vm.network :private_network,
       :auto_config => false,

@@ -1,3 +1,6 @@
+- name: update apt cache
+  apt: update_cache=yes
+
 - name: load vlan module
   modprobe: name=8021q
 

@@ -94,5 +94,5 @@ network_hosts:
     ip: 192.168.50.11
 
 haproxy_hosts:
-  haproxy:
+  loadbalancer:
     ip: 192.168.50.10
