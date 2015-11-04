@@ -29,6 +29,7 @@ global_overrides:
         container_interface: "eth10"
         ip_from_q: "tunnel"
         type: "vxlan"
+        net_name: "vxlan"
         range: "2000:3000"
         group_binds:
           - neutron_linuxbridge_agent
@@ -52,7 +53,6 @@ global_overrides:
 
 shared-infra_hosts:
   stackserver:
-    # Rabbitmq, and galera are set to multiples to test clustering.
     affinity:
       galera_container: 1
       rabbit_mq_container: 1
@@ -60,7 +60,6 @@ shared-infra_hosts:
 
 os-infra_hosts:
   stackserver:
-    # Horizon is set to multiple to test clustering. This test only requires x2.
     affinity:
       horizon_container: 1
     ip: 192.168.50.11
@@ -73,7 +72,6 @@ repo-infra_hosts:
 
 identity_hosts:
   stackserver:
-    # Keystone is set to multiple to test clustering. This test only requires x2.
     affinity:
       keystone_container: 1
     ip: 192.168.50.11
@@ -96,3 +94,10 @@ network_hosts:
 haproxy_hosts:
   loadbalancer:
     ip: 192.168.50.10
+
+# Not sure why this is needed but without it, it doesn't
+# create the keystone service
+metering-alarm_hosts:
+   stackserver:
+     ip: 192.168.50.11
+
