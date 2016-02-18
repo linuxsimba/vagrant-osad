@@ -25,6 +25,11 @@ iface eth2.2 inet manual
   up ip link set $IFACE up
   down ip link set $IFACE down
 
+auto eth2.100
+iface eth2.100 inet manual
+  up ip link set $IFACE up
+  down ip link set $IFACE down
+
 auto host-br
 iface host-br inet dhcp
   bridge_stp off
@@ -42,6 +47,13 @@ iface container-br inet static
   bridge_waitport 0
   bridge_ports eth2
   address 192.168.20.11/24
+
+auto br-vxlan
+iface br-vxlan inet static
+  bridge_stp off
+  bridge_waitport 0
+  bridge_ports eth2.100
+  address 192.168.40.3/24
 
 auto br-external
 iface br-external inet manual
