@@ -1,21 +1,10 @@
 ---
-- hosts: all
-  sudo: True
-  roles:
-    - { role: elnappoo.apt-cacher-ng, apt_cacher_ng_setup_ufw: False }
+- hosts: deploy
+  become: True
+  vars:
+    - openstack_release: 'liberty'
+    - ubuntu_repo: 'http://mirror.cwb.cumulusnetworks.com/ubuntu/'
   tasks:
-    - name: install vlan module
-      apt: name=vlan
-      environment:
-        http_proxy: "{{ apt_url }}"
-
-    - name: load vlan module
-      modprobe: name=8021q
-
-    - name: update /etc/modules
-      lineinfile: dest=/etc/modules line='8021q' state=present
-
-
     - name: configure network interfaces
       copy: src=interfaces.deployserver dest=/etc/network/interfaces
       notify:
@@ -35,15 +24,11 @@
       with_items:
         - vlan
         - lldpd
-        - bridge-utils
         - python-pip
         - git
         - vim
         - tmux
 
-
-    - name: copy ssh folder from vagrant to root. OSAD needs this
-      command:  cp -r /home/vagrant/.ssh /root/ creates=/root/.ssh
 
     - name: git clone osad repo
       git:
@@ -59,7 +44,7 @@
         chdir: '/root/osad'
 
     - name: copy openstack_deploy to /etc folder as recommended by Readme
-      shell: cp -r /root/osad/etc/openstack_deploy /etc/ creates=/etc/openstack_deploy
+      command: cp -r /root/osad/etc/openstack_deploy /etc/ creates=/etc/openstack_deploy
 
     - name: set the password for various openstack components to be password123
       replace:
@@ -72,9 +57,6 @@
       shell: ./scripts/pw-token-gen.py --file /etc/openstack_deploy/user_secrets.yml
       args:
         chdir: /root/osad
-
-    - name: generate root ssh key for OSAD deployment
-      user:  name=root generate_ssh_key=yes ssh_key_bits=2048 ssh_key_file=/root/.ssh/id_rsa
 
     - name: copy deploy ssh key to ansible server
       fetch:  src=/root/.ssh/id_rsa.pub dest=./deploy_key_id_rsa.pub flat=yes
@@ -97,12 +79,6 @@
         dest: "/etc/openstack_deploy/user_variables.yml"
         regexp: "haproxy_use_keepalived"
         line: "haproxy_use_keepalived: False"
-
-    - name: update vagrant bashrc to login as root when vagrant ssh deployserver is entered
-      lineinfile: dest=/home/vagrant/.bashrc line="sudo su -- root"  owner=vagrant
-
-    - name: update root bashrc to switch to the osad directory after ssh using vagrant ssh
-      lineinfile:  dest=/root/.bashrc line="cd /root/osad/playbooks" owner=root
 
 
   handlers:

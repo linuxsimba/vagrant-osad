@@ -1,0 +1,31 @@
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto eth0
+iface eth0 inet dhcp
+
+# host network
+auto eth1
+iface eth1 inet  manual
+  up ip link set $IFACE up
+  down ip link set $IFACE down
+
+auto host-br
+iface host-br inet dhcp
+  bridge_stp off
+  bridge_waitport 0
+  bridge_ports eth1
+
+auto eth2
+iface eth2 inet manual
+  up ip link set $IFACE up
+  down ip link set $IFACE down
+
+auto container-br
+iface container-br inet static
+  bridge_stp off
+  bridge_waitport 0
+  bridge_ports eth2
+  address 192.168.20.10/24

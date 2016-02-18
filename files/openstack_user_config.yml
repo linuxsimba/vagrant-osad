@@ -7,13 +7,13 @@ used_ips:
   - "192.168.20.1,192.168.20.14"
 
 global_overrides:
-  internal_lb_vip_address: 192.168.50.10
-  external_lb_vip_address: 192.168.20.10
-  management_bridge: "br-mgmt"
+  internal_lb_vip_address: 192.168.0.201
+  external_lb_vip_address: 192.168.20.11
+  management_bridge: "container-br"
   tunnel_bridge: "br-vxlan"
   provider_networks:
     - network:
-        container_bridge: "br-mgmt"
+        container_bridge: "container-br"
         container_type: "veth"
         container_interface: "eth1"
         ip_from_q: "container"
@@ -36,68 +36,67 @@ global_overrides:
     - network:
         container_bridge: "br-external"
         container_type: "veth"
-        container_interface: "eth12"
+        container_interface: "eth2.100"
         type: "flat"
         net_name: "flat"
         group_binds:
           - neutron_linuxbridge_agent
-    - network:
-        container_bridge: "br-vlan"
-        container_type: "veth"
-        container_interface: "eth11"
-        type: "vlan"
-        range: "100:200"
-        net_name: "vlan"
-        group_binds:
-          - neutron_linuxbridge_agent
+    #- network:
+    #    container_bridge: "br-vlan"
+    #    container_type: "veth"
+    #    container_interface: "eth11"
+    #    type: "vlan"
+    #    range: "100:200"
+    #    net_name: "vlan"
+    #    group_binds:
+    #      - neutron_linuxbridge_agent
 
 shared-infra_hosts:
   stackserver:
     affinity:
       galera_container: 1
       rabbit_mq_container: 1
-    ip: 192.168.50.11
+    ip: 192.168.0.201
 
 os-infra_hosts:
   stackserver:
     affinity:
       horizon_container: 1
-    ip: 192.168.50.11
+    ip: 192.168.0.201
 
 repo-infra_hosts:
   reposerver:
     affinity:
       repo_container: 1
-    ip: 192.168.50.12
+    ip: 192.168.0.201
 
 identity_hosts:
   stackserver:
     affinity:
       keystone_container: 1
-    ip: 192.168.50.11
+    ip: 192.168.0.201
 
 compute_hosts:
   stackserver:
-    ip: 192.168.50.11
+    ip: 192.168.0.201
 # optional 2nd compute server
 #  stackserver2:
 #   ip: 192.168.50.14
 
 log_hosts:
   stackserver:
-    ip: 192.168.50.11
+    ip: 192.168.0.201
 
 network_hosts:
   stackserver:
-    ip: 192.168.50.11
+    ip: 192.168.0.201
 
 haproxy_hosts:
   loadbalancer:
-    ip: 192.168.50.10
+    ip: 192.168.0.201
 
 # Not sure why this is needed but without it, it doesn't
 # create the keystone service
 metering-alarm_hosts:
    stackserver:
-     ip: 192.168.50.11
-
+     ip: 192.168.0.201

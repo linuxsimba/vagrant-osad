@@ -1,7 +1,9 @@
 ## apt_url should be mentioned in ansible.extra_vars in vagrant file
 ---
-- hosts: all
-  sudo: True
+- hosts: server
+  become: True
+  vars:
+    - ubuntu_repo: 'http://mirror.cwb.cumulusnetworks.com/ubuntu/'
   roles:
     - add_vlan_trunking
   tasks:

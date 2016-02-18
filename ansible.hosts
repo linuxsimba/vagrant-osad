@@ -1,0 +1,6 @@
+[deploy]
+localhost
+
+[server]
+server1
+server2
