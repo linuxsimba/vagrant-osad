@@ -36,7 +36,7 @@ global_overrides:
     - network:
         container_bridge: "br-external"
         container_type: "veth"
-        container_interface: "eth2.100"
+        container_interface: "eth2.2"
         type: "flat"
         net_name: "flat"
         group_binds:
